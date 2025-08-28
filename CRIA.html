@@ -1,95 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHROMAKOPIA VINYL</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: #000;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-      color: #fff;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHROMAKOPIA VINYL</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    color: #fff;
+  }
 
-    video {
-      max-width: 90%;
-      max-height: 70vh;
-      border-radius: 10px;
-      opacity: 0;
-      transform: scale(1.2);
-      animation: zoomIn 2.5s ease-out forwards;
-      outline: none;
-    }
+  video {
+    max-width: 90%;
+    max-height: 70vh;
+    border-radius: 10px;
+    opacity: 0;
+    transform: scale(1.2);
+    animation: zoomIn 2.5s ease-out forwards;
+  }
 
-    @keyframes zoomIn {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+  @keyframes zoomIn {
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
+  }
 
-    .credit {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #aaa;
-      font-style: italic;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 2s forwards 2s;
-    }
+  .credit {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #aaa;
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 2s forwards 2s;
+  }
 
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
 
-    /* Player discreto embaixo */
-    #videoPlayer {
-      margin-top: 20px;
-      max-width: 90%;
-      border-radius: 10px;
-      outline: none;
-    }
-  </style>
+  /* Botão central grande para celular e desktop */
+  #playButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(104, 104, 104, 0.9);
+    color: #fff;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  #playButton:hover {
+    background-color: rgb(83, 115, 204);
+  }
+</style>
 </head>
 <body>
-  <!-- Vídeo com animação -->
-  <video id="video" muted loop>
-    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
-    Seu navegador não suporta vídeo.
-  </video>
 
-  <div class="credit">(cr.ia)</div>
+<video id="video" loop>
+  <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
+  Seu navegador não suporta vídeo.
+</video>
 
-  <!-- Player visível -->
-  <video id="videoPlayer" controls>
-    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
-    Seu navegador não suporta vídeo.
-  </video>
+<div class="credit">(cr.ia)</div>
 
-  <script>
-    const video = document.getElementById('video');
-    const player = document.getElementById('videoPlayer');
+<button id="playButton">PLAY!</button>
 
-    // Toca a animação inicial em loop silenciosa
-    video.play().catch(() => {
-      console.log("O autoplay do vídeo inicial não funcionou, use o player.");
-    });
+<script>
+  const video = document.getElementById('video');
+  const button = document.getElementById('playButton');
 
-    // Quando o player é usado, pode pausar a animação se quiser
-    player.addEventListener('play', () => {
-      video.pause();
-      video.style.opacity = 0.5; // deixa a animação de fundo meio visível
-    });
-  </script>
+  // Carrega o vídeo, garante que está pronto
+  video.load();
+
+  // Botão de play obrigatório para celulares
+  button.addEventListener('click', () => {
+    video.play().catch(err => console.log(err));
+    button.style.display = 'none'; // some quando toca
+  });
+
+  // Loop infinito (já temos loop no atributo, mas reforçando)
+  video.addEventListener('ended', () => {
+    video.currentTime = 0;
+    video.play();
+  });
+</script>
+
 </body>
 </html>
