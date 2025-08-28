@@ -1,107 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHROMAKOPIA VINYL</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    color: #fff;
-  }
-
-  video {
-    max-width: 90%;
-    max-height: 70vh;
-    border-radius: 10px;
-    opacity: 0;
-    transform: scale(1.2);
-    animation: zoomIn 2.5s ease-out forwards;
-  }
-
-  @keyframes zoomIn {
-    to {
-      opacity: 1;
-      transform: scale(1);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHROMAKOPIA VINYL</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      color: #fff;
     }
-  }
 
-  .credit {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #aaa;
-    font-style: italic;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 2s forwards 2s;
-  }
-
-  @keyframes fadeUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    video {
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 10px;
+      opacity: 0;
+      transform: scale(1.2);
+      animation: zoomIn 2.5s ease-out forwards;
+      outline: none;
     }
-  }
 
-  /* Botão central grande para celular e desktop */
-  #playButton {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px 40px;
-    font-size: 20px;
-    border: none;
-    border-radius: 10px;
-    background-color: rgba(104, 104, 104, 0.9);
-    color: #fff;
-    cursor: pointer;
-    z-index: 10;
-  }
+    @keyframes zoomIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
 
-  #playButton:hover {
-    background-color: rgb(83, 115, 204);
-  }
-</style>
+    .credit {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+      font-style: italic;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 2s forwards 2s;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Botão central grande para celular */
+    #playButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(29, 185, 84, 0.9);
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #playButton:hover {
+      background-color: rgba(29, 185, 84, 1);
+    }
+  </style>
 </head>
 <body>
+  <video id="video" loop>
+    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
+  </video>
 
-<video id="video" loop>
-  <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
-  Seu navegador não suporta vídeo.
-</video>
+  <div class="credit">(cr.ia)</div>
 
-<div class="credit">(cr.ia)</div>
+  <button id="playButton">▶️ Tocar Vídeo</button>
 
-<button id="playButton">PLAY!</button>
+  <script>
+    const video = document.getElementById('video');
+    const button = document.getElementById('playButton');
 
-<script>
-  const video = document.getElementById('video');
-  const button = document.getElementById('playButton');
+    // Garante que o vídeo carregou
+    video.load();
 
-  // Carrega o vídeo, garante que está pronto
-  video.load();
-
-  // Botão de play obrigatório para celulares
-  button.addEventListener('click', () => {
-    video.play().catch(err => console.log(err));
-    button.style.display = 'none'; // some quando toca
-  });
-
-  // Loop infinito (já temos loop no atributo, mas reforçando)
-  video.addEventListener('ended', () => {
-    video.currentTime = 0;
-    video.play();
-  });
-</script>
-
+    // Play via botão obrigatório no celular
+    button.addEventListener('click', () => {
+      video.play().catch(err => console.log(err));
+      button.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
