@@ -55,42 +55,10 @@
       }
     }
 
-    #playButton {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 18px 36px; /* Ajustado para facilitar toque */
-      font-size: 20px;
-      border: none;
-      border-radius: 10px;
-      background-color: rgba(75, 78, 76, 0.753);
-      color: #fff;
-      cursor: pointer;
-      z-index: 1000;
-      touch-action: manipulation; /* Melhora resposta ao toque */
-      transition: background-color 0.3s, transform 0.2s;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adiciona sombra para destaque */
-    }
-
-    #playButton:hover,
-    #playButton:active {
-      background-color: rgb(105, 123, 201);
-      transform: translate(-50%, -50%) scale(0.95); /* Efeito de pressão */
-    }
-
-    #playButton.hidden {
-      display: none;
-    }
-
     /* Ajustes para telas menores */
     @media screen and (max-width: 600px) {
       video {
         max-height: 65vh;
-      }
-      #playButton {
-        padding: 15px 30px;
-        font-size: 18px;
       }
       .credit {
         font-size: 12px;
@@ -99,18 +67,15 @@
   </style>
 </head>
 <body>
-  <video id="video" loop playsinline>
+  <video id="video" controls loop playsinline>
     <source src="./CHROMAKOPIA VINYL.mp4" type="video/mp4">
     Seu navegador não suporta vídeo. Tente usar um navegador moderno como Chrome ou Firefox.
   </video>
 
   <div class="credit">(cr.ia)</div>
 
-  <button id="playButton">PLAY!</button>
-
   <script>
     const video = document.getElementById('video');
-    const button = document.getElementById('playButton');
 
     // Garante que o vídeo esteja pausado inicialmente
     video.load();
@@ -127,30 +92,9 @@
       console.log('Vídeo carregado com sucesso.');
     });
 
-    // Função para reproduzir o vídeo
-    const playVideo = () => {
-      video.muted = false;
-      video.play()
-        .then(() => {
-          button.classList.add('hidden');
-          console.log('Vídeo iniciado com sucesso com som.');
-        })
-        .catch(err => {
-          console.error('Erro ao reproduzir o vídeo:', err);
-          alert('Erro ao reproduzir o vídeo. Verifique as permissões ou tente outro navegador.');
-        });
-    };
-
-    // Suporte a clique e toque
-    button.addEventListener('click', playVideo);
-    button.addEventListener('touchstart', (e) => {
-      e.preventDefault(); // Evita zoom ao tocar
-      playVideo();
-    });
-
     // Ajuste para mudanças de orientação
     window.addEventListener('orientationchange', () => {
-      video.style.maxHeight = window.innerHeight * 0.7 + 'px';
+      video.style.maxHeight = window.innerHeight * 0.65 + 'px';
     });
   </script>
 </body>
