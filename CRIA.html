@@ -25,6 +25,7 @@
       opacity: 0;
       transform: scale(1.2);
       animation: zoomIn 2.5s ease-out forwards;
+      outline: none;
     }
 
     @keyframes zoomIn {
@@ -51,49 +52,43 @@
       }
     }
 
-    /* Botão sempre visível */
-    #soundButton {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background: rgba(255,255,255,0.2);
-      border: none;
-      cursor: pointer;
-      border-radius: 50%;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      color: #fff;
-      transition: background 0.3s;
-    }
-
-    #soundButton:hover {
-      background: rgba(255,255,255,0.4);
+    /* Player discreto embaixo */
+    #videoPlayer {
+      margin-top: 20px;
+      max-width: 90%;
+      border-radius: 10px;
+      outline: none;
     }
   </style>
 </head>
 <body>
-  <video id="video" autoplay muted loop>
+  <!-- Vídeo com animação -->
+  <video id="video" muted loop>
     <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
     Seu navegador não suporta vídeo.
   </video>
 
   <div class="credit">(cr.ia)</div>
 
-  <button id="soundButton">🔊</button>
+  <!-- Player visível -->
+  <video id="videoPlayer" controls>
+    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
+  </video>
 
   <script>
     const video = document.getElementById('video');
-    const button = document.getElementById('soundButton');
+    const player = document.getElementById('videoPlayer');
 
-    button.addEventListener('click', () => {
-      video.muted = false;
-      video.play();
-      button.style.display = 'none'; // botão some depois de tocar
+    // Toca a animação inicial em loop silenciosa
+    video.play().catch(() => {
+      console.log("O autoplay do vídeo inicial não funcionou, use o player.");
+    });
+
+    // Quando o player é usado, pode pausar a animação se quiser
+    player.addEventListener('play', () => {
+      video.pause();
+      video.style.opacity = 0.5; // deixa a animação de fundo meio visível
     });
   </script>
 </body>
