@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CHROMAKOPIA VINYL</title>
   <style>
     body {
@@ -16,6 +16,8 @@
       font-family: Arial, sans-serif;
       overflow: hidden;
       color: #fff;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     video {
@@ -25,9 +27,10 @@
       opacity: 0;
       transform: scale(1.2);
       animation: zoomIn 2.5s ease-out forwards;
+      outline: none;
+      object-fit: contain;
     }
 
-    /* Animação zoom + fade */
     @keyframes zoomIn {
       to {
         opacity: 1;
@@ -51,25 +54,97 @@
         transform: translateY(0);
       }
     }
+
+    .error-message {
+      display: none;
+      color: #ff5555;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 10px;
+      max-width: 90%;
+      padding: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+      video {
+        max-height: 65vh;
+      }
+      .credit, .error-message {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- O vídeo já tenta autoplay -->
-  <video id="video" autoplay muted loop playsinline>
-    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
-    Seu navegador não suporta vídeo.
+  <video id="video" controls loop playsinline>
+    <source id="videoSource" src="./CHROMAKOPIA VINYL.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo. Tente usar um navegador moderno como Chrome ou Firefox.
   </video>
 
   <div class="credit">(cr.ia)</div>
+  <div class="error-message" id="errorMessage"></div>
 
   <script>
-    const video = document.getElementById("video");
+    const video = document.getElementById('video');
+    const errorMessage = document.getElementById('errorMessage');
 
-    // tenta forçar o som (se o navegador permitir)
-    video.play().then(() => {
-      video.muted = false;
-    }).catch(err => {
-      console.warn("Autoplay com som foi bloqueado:", err);
+    // Função para mostrar mensagens de erro
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      console.error(message);
+    }
+
+    // Garante que o vídeo não toque automaticamente
+    video.load();
+    video.pause();
+
+    // Verifica se o vídeo está acessível
+    fetch('./CHROMAKOPIA VINYL.mp4', { method: 'HEAD' })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Vídeo não encontrado no servidor. Verifique se o arquivo "CHROMAKOPIA VINYL.mp4" foi enviado para o GitHub.');
+        }
+        console.log('Vídeo encontrado no servidor.');
+      })
+      .catch(err => {
+        showError(`Erro: ${err.message}`);
+      });
+
+    // Trata erros de carregamento do vídeo
+    video.addEventListener('error', () => {
+      let message = 'Erro ao carregar o vídeo: ';
+      const error = video.error;
+      if (error) {
+        switch (error.code) {
+          case MediaError.MEDIA_ERR_ABORTED:
+            message += 'Reprodução cancelada.';
+            break;
+          case MediaError.MEDIA_ERR_NETWORK:
+            message += 'Problema de rede. Verifique sua conexão ou o caminho do arquivo.';
+            break;
+          case MediaError.MEDIA_ERR_DECODE:
+            message += 'Vídeo corrompido ou formato inválido.';
+            break;
+          case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            message += 'Arquivo não encontrado ou formato não suportado.';
+            break;
+          default:
+            message += 'Erro desconhecido.';
+        }
+      }
+      showError(message);
+    });
+
+    // Confirma carregamento bem-sucedido
+    video.addEventListener('loadeddata', () => {
+      console.log('Vídeo carregado com sucesso.');
+      errorMessage.style.display = 'none';
+    });
+
+    // Ajusta o tamanho do vídeo em mudanças de orientação
+    window.addEventListener('orientationchange', () => {
+      video.style.maxHeight = window.innerHeight * 0.65 + 'px';
     });
   </script>
 </body>
