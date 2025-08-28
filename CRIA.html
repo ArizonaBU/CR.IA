@@ -52,7 +52,6 @@
       }
     }
 
-    /* Botão central grande para celular */
     #playButton {
       position: absolute;
       top: 50%;
@@ -65,7 +64,7 @@
       background-color: rgba(29, 185, 84, 0.9);
       color: #fff;
       cursor: pointer;
-      z-index: 1000; /* Garante que o botão fique acima do vídeo */
+      z-index: 1000;
       transition: background-color 0.3s;
     }
 
@@ -73,15 +72,14 @@
       background-color: rgba(29, 185, 84, 1);
     }
 
-    /* Esconde o botão quando o vídeo está tocando */
     #playButton.hidden {
       display: none;
     }
   </style>
 </head>
 <body>
-  <video id="video" loop playsinline>
-    <source src="./CHROMAKOPIA VINYL.mp4" type="video/mp4">
+  <video id="video" loop playsinline controls>
+    <source src="https://raw.githubusercontent.com/ArizonaBU/CR.IA/main/CHROMAKOPIA VINYL.mp4" type="video/mp4">
     Seu navegador não suporta vídeo. Tente usar um navegador moderno como Chrome ou Firefox.
   </video>
 
@@ -93,32 +91,28 @@
     const video = document.getElementById('video');
     const button = document.getElementById('playButton');
 
-    // Garante que o vídeo seja carregado, mas não toque automaticamente
     video.load();
-    video.pause(); // Garante que o vídeo esteja pausado inicialmente
+    video.pause();
 
-    // Adiciona evento de erro para depuração
     video.addEventListener('error', (e) => {
       console.error('Erro ao carregar o vídeo:', e);
-      alert('Não foi possível carregar o vídeo. Verifique se o arquivo está no caminho correto e é um MP4 válido.');
+      alert('Não foi possível carregar o vídeo. Verifique se o link do vídeo está correto ou se o arquivo é um MP4 válido.');
     });
 
-    // Verifica se o vídeo foi carregado com sucesso
     video.addEventListener('loadeddata', () => {
       console.log('Vídeo carregado com sucesso.');
     });
 
-    // Play com som ao clicar no botão
     button.addEventListener('click', () => {
-      video.muted = false; // Garante que o som esteja habilitado
+      video.muted = false;
       video.play()
         .then(() => {
-          button.classList.add('hidden'); // Esconde o botão após iniciar o vídeo
+          button.classList.add('hidden');
           console.log('Vídeo iniciado com sucesso com som.');
         })
         .catch(err => {
           console.error('Erro ao reproduzir o vídeo:', err);
-          alert('Erro ao reproduzir o vídeo. Verifique as permissões ou tente outro navegador.');
+          alert('Erro ao reproduzir o vídeo. Tente outro navegador ou verifique o arquivo de vídeo.');
         });
     });
   </script>
