@@ -65,18 +65,24 @@
       background-color: rgba(29, 185, 84, 0.9);
       color: #fff;
       cursor: pointer;
-      z-index: 10;
+      z-index: 1000; /* Garante que o botão fique acima do vídeo */
+      transition: background-color 0.3s;
     }
 
     #playButton:hover {
       background-color: rgba(29, 185, 84, 1);
     }
+
+    /* Esconde o botão quando o vídeo está tocando */
+    #playButton.hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <video id="video" loop>
-    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
-    Seu navegador não suporta vídeo.
+  <video id="video" loop playsinline>
+    <source src="./CHROMAKOPIA VINYL.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo. Tente usar um navegador moderno como Chrome ou Firefox.
   </video>
 
   <div class="credit">(cr.ia)</div>
@@ -87,13 +93,33 @@
     const video = document.getElementById('video');
     const button = document.getElementById('playButton');
 
-    // Garante que o vídeo carregou
+    // Garante que o vídeo seja carregado, mas não toque automaticamente
     video.load();
+    video.pause(); // Garante que o vídeo esteja pausado inicialmente
 
-    // Play via botão obrigatório no celular
+    // Adiciona evento de erro para depuração
+    video.addEventListener('error', (e) => {
+      console.error('Erro ao carregar o vídeo:', e);
+      alert('Não foi possível carregar o vídeo. Verifique se o arquivo está no caminho correto e é um MP4 válido.');
+    });
+
+    // Verifica se o vídeo foi carregado com sucesso
+    video.addEventListener('loadeddata', () => {
+      console.log('Vídeo carregado com sucesso.');
+    });
+
+    // Play com som ao clicar no botão
     button.addEventListener('click', () => {
-      video.play().catch(err => console.log(err));
-      button.style.display = 'none';
+      video.muted = false; // Garante que o som esteja habilitado
+      video.play()
+        .then(() => {
+          button.classList.add('hidden'); // Esconde o botão após iniciar o vídeo
+          console.log('Vídeo iniciado com sucesso com som.');
+        })
+        .catch(err => {
+          console.error('Erro ao reproduzir o vídeo:', err);
+          alert('Erro ao reproduzir o vídeo. Verifique as permissões ou tente outro navegador.');
+        });
     });
   </script>
 </body>
