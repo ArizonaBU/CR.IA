@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CHROMAKOPIA VINYL</title>
   <style>
     body {
@@ -16,6 +16,8 @@
       font-family: Arial, sans-serif;
       overflow: hidden;
       color: #fff;
+      -webkit-user-select: none; /* Evita seleção de texto no mobile */
+      user-select: none;
     }
 
     video {
@@ -26,6 +28,7 @@
       transform: scale(1.2);
       animation: zoomIn 2.5s ease-out forwards;
       outline: none;
+      object-fit: contain; /* Garante que o vídeo não seja cortado */
     }
 
     @keyframes zoomIn {
@@ -57,53 +60,75 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 20px 40px;
+      padding: 18px 36px; /* Ajustado para facilitar toque */
       font-size: 20px;
       border: none;
       border-radius: 10px;
-      background-color: rgba(29, 185, 84, 0.9);
+      background-color: rgba(75, 78, 76, 0.753);
       color: #fff;
       cursor: pointer;
       z-index: 1000;
-      transition: background-color 0.3s;
+      touch-action: manipulation; /* Melhora resposta ao toque */
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adiciona sombra para destaque */
     }
 
-    #playButton:hover {
-      background-color: rgba(29, 185, 84, 1);
+    #playButton:hover,
+    #playButton:active {
+      background-color: rgb(105, 123, 201);
+      transform: translate(-50%, -50%) scale(0.95); /* Efeito de pressão */
     }
 
     #playButton.hidden {
       display: none;
     }
+
+    /* Ajustes para telas menores */
+    @media screen and (max-width: 600px) {
+      video {
+        max-height: 65vh;
+      }
+      #playButton {
+        padding: 15px 30px;
+        font-size: 18px;
+      }
+      .credit {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
-  <video id="video" loop playsinline controls>
-    <source src="https://raw.githubusercontent.com/ArizonaBU/CR.IA/main/CHROMAKOPIA VINYL.mp4" type="video/mp4">
+  <video id="video" loop playsinline>
+    <source src="./CHROMAKOPIA VINYL.mp4" type="video/mp4">
     Seu navegador não suporta vídeo. Tente usar um navegador moderno como Chrome ou Firefox.
   </video>
 
   <div class="credit">(cr.ia)</div>
 
-  <button id="playButton">▶️ Tocar Vídeo</button>
+  <button id="playButton">PLAY!</button>
 
   <script>
     const video = document.getElementById('video');
     const button = document.getElementById('playButton');
 
+    // Garante que o vídeo esteja pausado inicialmente
     video.load();
     video.pause();
 
+    // Log de erro para depuração
     video.addEventListener('error', (e) => {
       console.error('Erro ao carregar o vídeo:', e);
-      alert('Não foi possível carregar o vídeo. Verifique se o link do vídeo está correto ou se o arquivo é um MP4 válido.');
+      alert('Não foi possível carregar o vídeo. Verifique se o arquivo está no caminho correto e é um MP4 válido.');
     });
 
+    // Confirma carregamento do vídeo
     video.addEventListener('loadeddata', () => {
       console.log('Vídeo carregado com sucesso.');
     });
 
-    button.addEventListener('click', () => {
+    // Função para reproduzir o vídeo
+    const playVideo = () => {
       video.muted = false;
       video.play()
         .then(() => {
@@ -112,8 +137,20 @@
         })
         .catch(err => {
           console.error('Erro ao reproduzir o vídeo:', err);
-          alert('Erro ao reproduzir o vídeo. Tente outro navegador ou verifique o arquivo de vídeo.');
+          alert('Erro ao reproduzir o vídeo. Verifique as permissões ou tente outro navegador.');
         });
+    };
+
+    // Suporte a clique e toque
+    button.addEventListener('click', playVideo);
+    button.addEventListener('touchstart', (e) => {
+      e.preventDefault(); // Evita zoom ao tocar
+      playVideo();
+    });
+
+    // Ajuste para mudanças de orientação
+    window.addEventListener('orientationchange', () => {
+      video.style.maxHeight = window.innerHeight * 0.7 + 'px';
     });
   </script>
 </body>
