@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHROMAKOPIA VINYL</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    video {
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 10px;
+      opacity: 0;
+      transform: scale(1.2);
+      animation: zoomIn 2.5s ease-out forwards;
+    }
+
+    /* Animação zoom + fade */
+    @keyframes zoomIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Fade-up no crédito */
+    .credit {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+      font-style: italic;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 2s forwards 2s;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Botão ultra discreto */
+    #soundButton {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 30px;
+      height: 30px;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    #soundButton:hover {
+      background: rgba(255,255,255,0.15);
+    }
+  </style>
+</head>
+<body>
+  <video id="video" autoplay muted loop>
+    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
+  </video>
+  <div class="credit">(cr.ia)</div>
+
+  <button id="soundButton"></button>
+
+  <script>
+    const video = document.getElementById('video');
+    const button = document.getElementById('soundButton');
+
+    button.addEventListener('click', () => {
+      video.muted = false; // ativa o som
+      video.play();         // toca com som
+      button.style.display = 'none'; // esconde o botão
+    });
+  </script>
+</body>
+</html>

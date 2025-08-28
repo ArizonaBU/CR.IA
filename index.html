@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHROMAKOPIA VINYL</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    video {
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 10px;
+      opacity: 0;
+      transform: scale(1.2);
+      animation: zoomIn 2.5s ease-out forwards;
+    }
+
+    /* Animação zoom + fade */
+    @keyframes zoomIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .credit {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+      font-style: italic;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 2s forwards 2s;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- O vídeo já tenta autoplay -->
+  <video id="video" autoplay muted loop playsinline>
+    <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
+  </video>
+
+  <div class="credit">(cr.ia)</div>
+
+  <script>
+    const video = document.getElementById("video");
+
+    // tenta forçar o som (se o navegador permitir)
+    video.play().then(() => {
+      video.muted = false;
+    }).catch(err => {
+      console.warn("Autoplay com som foi bloqueado:", err);
+    });
+  </script>
+</body>
+</html>
