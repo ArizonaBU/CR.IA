@@ -27,7 +27,6 @@
       animation: zoomIn 2.5s ease-out forwards;
     }
 
-    /* Animação zoom + fade */
     @keyframes zoomIn {
       to {
         opacity: 1;
@@ -35,7 +34,6 @@
       }
     }
 
-    /* Fade-up no crédito */
     .credit {
       margin-top: 10px;
       font-size: 14px;
@@ -53,22 +51,28 @@
       }
     }
 
-    /* Botão ultra discreto */
+    /* Botão sempre visível */
     #soundButton {
       position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 30px;
-      height: 30px;
-      background: rgba(255,255,255,0.05);
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
       border: none;
       cursor: pointer;
       border-radius: 50%;
       z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: #fff;
+      transition: background 0.3s;
     }
 
     #soundButton:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.4);
     }
   </style>
 </head>
@@ -77,18 +81,19 @@
     <source src="CHROMAKOPIA VINYL.mp4" type="video/mp4">
     Seu navegador não suporta vídeo.
   </video>
+
   <div class="credit">(cr.ia)</div>
 
-  <button id="soundButton"></button>
+  <button id="soundButton">🔊</button>
 
   <script>
     const video = document.getElementById('video');
     const button = document.getElementById('soundButton');
 
     button.addEventListener('click', () => {
-      video.muted = false; // ativa o som
-      video.play();         // toca com som
-      button.style.display = 'none'; // esconde o botão
+      video.muted = false;
+      video.play();
+      button.style.display = 'none'; // botão some depois de tocar
     });
   </script>
 </body>
